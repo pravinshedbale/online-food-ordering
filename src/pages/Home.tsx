@@ -1,22 +1,29 @@
 import { useEffect } from "react";
-
-interface IHotel {
-  name: string;
-  cuisines: string;
-  featured_image: string;
-  id: string;
-}
-
+import { useDispatch } from "react-redux";
+import { setHotels } from "../State/HotelSlice";
+// import { fetchHotels } from "../State/HotelSlice";
+import IHotel from "../Interfaces/Hotels";
+import { useSelector } from "react-redux";
+import { AppState } from "../State/Store";
 const Home = () => {
+  const dispatch = useDispatch();
   useEffect(() => {
-    async function getHotels() {
-      const hotels = await fetch("./hotel.json");
-      const hotelsArr: { restaurant: IHotel }[] = await hotels.json();
-      console.log(hotelsArr.map((x) => x.restaurant));
-    }
-    getHotels();
+    const fetchHotels = async () => {
+      const res = await fetch("/hotel.json");
+      const json: { restaurant: IHotel }[] = await res.json();
+      dispatch(setHotels(json.map((rec) => rec.restaurant)));
+    };
+    fetchHotels();
+    console.log("Data received");
   }, []);
-  return <div>Hotels</div>;
+  const hotels = useSelector((state: AppState) => state.hotelSlice);
+  return (
+    <div>
+      {hotels.map((hotel) => (
+        <img src={hotel.featured_image}></img>
+      ))}
+    </div>
+  );
 };
 
 export default Home;

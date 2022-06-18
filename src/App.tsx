@@ -1,14 +1,12 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-function App() {
+import { configureStore } from "./State/Store";
+import { Provider } from "react-redux";
+import Home from "./Pages/Home";
+const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <Provider store={configureStore()}>
+      <Home></Home>
+    </Provider>
   );
-}
+};
 
 export default App;
